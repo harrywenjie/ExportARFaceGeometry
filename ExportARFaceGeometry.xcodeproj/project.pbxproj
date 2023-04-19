@@ -23,6 +23,7 @@
 		451A04A429E7FDE800B23762 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		451A04A629E7FDE800B23762 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		451A04A929E7FDE800B23762 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		451A04B029E8133300B23762 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +56,7 @@
 		451A049C29E7FDE800B23762 /* ExportARFaceGeometry */ = {
 			isa = PBXGroup;
 			children = (
+				451A04B029E8133300B23762 /* Info.plist */,
 				451A049D29E7FDE800B23762 /* AppDelegate.swift */,
 				451A049F29E7FDE800B23762 /* art.scnassets */,
 				451A04A129E7FDE800B23762 /* ViewController.swift */,
@@ -287,7 +289,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7TLPFH625A;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_FILE = ExportARFaceGeometry/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires access to the camera for AR functionality.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -317,7 +320,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7TLPFH625A;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_FILE = ExportARFaceGeometry/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires access to the camera for AR functionality.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

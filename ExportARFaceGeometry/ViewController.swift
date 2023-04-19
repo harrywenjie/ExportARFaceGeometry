@@ -1,10 +1,3 @@
-//
-//  ViewController.swift
-//  ExportARFaceGeometry
-//
-//  Created by Harry He on 13/04/23.
-//
-
 import UIKit
 import SceneKit
 import ARKit
@@ -23,7 +16,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.showsStatistics = true
         
         // Create a new scene
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
+        let scene = SCNScene()
         
         // Set the scene to the view
         sceneView.scene = scene
@@ -33,12 +26,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         super.viewWillAppear(animated)
         
         // Create a session configuration
-        let configuration = ARWorldTrackingConfiguration()
+        let configuration = ARFaceTrackingConfiguration()
 
         // Run the view's session
         sceneView.session.run(configuration)
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
@@ -47,28 +40,66 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
 
     // MARK: - ARSCNViewDelegate
-    
-/*
-    // Override to create and configure nodes for anchors added to the view's session.
-    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        let node = SCNNode()
-     
-        return node
-    }
-*/
-    
-    func session(_ session: ARSession, didFailWithError error: Error) {
-        // Present an error message to the user
+
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        guard let faceAnchor = anchor as? ARFaceAnchor else {
+            return
+        }
+
+        let faceGeometry = ARSCNFaceGeometry(device: sceneView.device!)
+        faceGeometry?.update(from: faceAnchor.geometry)
         
-    }
-    
-    func sessionWasInterrupted(_ session: ARSession) {
-        // Inform the user that the session has been interrupted, for example, by presenting an overlay
+        // Export the geometry as a .obj file
+        let objFile = faceAnchor.geometry.toObjFile()
         
-    }
-    
-    func sessionInterruptionEnded(_ session: ARSession) {
-        // Reset tracking and/or remove existing anchors if consistent tracking is required
+        let objFilename = "ARFaceGeometry.obj"
         
+        // Save the .obj file to the app's Documents directory
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let objURL = documentsDirectory.appendingPathComponent(objFilename)
+        
+        do {
+            try objFile.write(to: objURL, atomically: true, encoding: String.Encoding.utf8)
+            print("Successfully saved ARFaceGeometry.obj to the Documents directory")
+        } catch {
+            print("Error saving ARFaceGeometry.obj: \(error)")
+        }
+    }
+}
+
+func scnVector3(from simdVector: simd_float3) -> SCNVector3 {
+    return SCNVector3(simdVector.x, simdVector.y, simdVector.z)
+}
+
+extension ARFaceGeometry {
+    func toObjFile() -> String {
+        var objString = "# Exported ARFaceGeometry OBJ\n\n"
+        
+        for vertexIndex in 0..<self.vertices.count {
+            let vertex = scnVector3(from: self.vertices[vertexIndex])
+            objString += "v \(vertex.x) \(vertex.y) \(vertex.z)\n"
+        }
+        
+        for texCoordIndex in 0..<self.textureCoordinates.count {
+            let texCoord = self.textureCoordinates[texCoordIndex]
+            objString += "vt \(texCoord.x) \(texCoord.y)\n"
+        }
+        
+        for i in stride(from: 0, to: self.triangleIndices.count, by: 3) {
+            let indices = [
+                Int(self.triangleIndices[i]) + 1,
+                Int(self.triangleIndices[i + 1]) + 1,
+                Int(self.triangleIndices[i + 2]) + 1
+            ]
+            objString += "f \(indices[0])/\(indices[0])/\(indices[0]) \(indices[1])/\(indices[1])/\(indices[1]) \(indices[2])/\(indices[2])/\(indices[2])\n"
+        }
+        return objString
+    }
+}
+
+extension SCNVector3 {
+    func normalized() -> SCNVector3 {
+        let length = sqrt(x * x + y * y + z * z)
+        return SCNVector3(x / length, y / length, z / length)
     }
 }
