@@ -91,7 +91,7 @@ extension ARFaceGeometry {
                 Int(self.triangleIndices[i + 1]) + 1,
                 Int(self.triangleIndices[i + 2]) + 1
             ]
-            objString += "f \(indices[0])/\(indices[0])/\(indices[0]) \(indices[1])/\(indices[1])/\(indices[1]) \(indices[2])/\(indices[2])/\(indices[2])\n"
+            objString += "f \(indices[0])/\(indices[0]) \(indices[1])/\(indices[1]) \(indices[2])/\(indices[2])\n"
         }
         return objString
     }
